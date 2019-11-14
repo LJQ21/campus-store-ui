@@ -1,5 +1,12 @@
 <template lang="pug">
-  h1 This is campus-store-ui
+  div#app
+    router-view
 </template>
+
+<script>
+export default {
+  name: "App"
+};
+</script>
 
 <style lang="less"></style>
