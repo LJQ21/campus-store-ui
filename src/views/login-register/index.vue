@@ -11,35 +11,48 @@
             .sign-in-htm
               .group
                 label.label(for='user') Username
-                input#user.input(type='text' v-model='loginForm.username')
+                input#user.input(type='text' v-model.trim='$v.loginForm.username.$model' @blur='$v.loginForm.username.$touch')
+                .error-tip(v-if='$v.loginForm.username.$dirty && !$v.loginForm.username.required' class='animated shake') 用户名不能为空
               .group
                 label.label(for='pass') Password
-                input#pass.input(type='password', data-type='password' v-model='loginForm.password' @blur='check_password')
+                input#pass.input(type='password', data-type='password' v-model.trim='$v.loginForm.password.$model' @blur='$v.loginForm.password.$touch')
+                .error-tip(v-if='$v.loginForm.password.$dirty && !$v.loginForm.password.required' class='animated shake') 不能为空
               .group
                 input#check.check(type='checkbox', checked='')
                 label(for='check')
                   span.icon
                   |  Keep me Signed in
               .group
-                input.button(type='submit', value='Sign In')
+                input.button(type='submit', value='Sign In' @click='handleLoginIn')
               .hr
               .foot-lnk
                 a(href='#forgot') Forgot Password?
             .sign-up-htm
               .group
                 label.label(for='user') Username
-                input#user.input(type='text' v-model='registerForm.username')
+                input#user.input(type='text' v-model.trim='$v.registerForm.username.$model' @blur='$v.registerForm.username.$touch')
+                .error-tip(v-if='$v.registerForm.username.$dirty && !$v.registerForm.username.required' class='animated shake') 不能为空
+                .error-tip(v-else-if='$v.registerForm.username.$dirty && !$v.registerForm.username.alphaNum' class='animated shake') 用户名名由字母或数字构成
+                .error-tip(v-else-if='$v.registerForm.username.$dirty && !$v.registerForm.username.minLength' class='animated shake') 密码长度不得少于6位
+                .error-tip(v-else-if='$v.registerForm.username.$dirty && !$v.registerForm.username.maxLength' class='animated shake') 密码长度不得超过18位
               .group
                 label.label(for='pass') Password
-                input#pass.input(type='password', data-type='password' v-model='registerForm.password')
+                input#pass.input(type='password', data-type='password' v-model.trim='$v.registerForm.password.$model' @blur='$v.registerForm.password.$touch')
+                .error-tip(v-if='$v.registerForm.password.$dirty && !$v.registerForm.password.required' class='animated shake') 密码为空
+                .error-tip(v-else-if='$v.registerForm.password.$dirty && !$v.registerForm.password.alphaNum' class='animated shake') 用户名名由字母或数字构成
+                .error-tip(v-else-if='$v.registerForm.password.$dirty && !$v.registerForm.password.minLength' class='animated shake') 密码长度不得少于4位
+                .error-tip(v-else-if='$v.registerForm.password.$dirty && !$v.registerForm.password.maxLength' class='animated shake') 密码长度不得超过18位
               .group
                 label.label(for='pass') Repeat Password
-                input#pass.input(type='password', data-type='password' v-model='registerForm.repeat_password')
+                input#pass.input(type='password', data-type='password' v-model.trim='$v.registerForm.repeat_password.$model')
+                .error-tip(v-if='$v.registerForm.repeat_password.$dirty && !$v.registerForm.repeat_password.sameAsPassword' class='animated shake') 密码不一致
               .group
                 label.label(for='pass') Email Address
-                input#pass.input(type='text' v-model='registerForm.email')
+                input#pass.input(type='text' v-model='$v.registerForm.email.$model' @blur='$v.registerForm.email.$touch')
+                .error-tip(v-if='$v.registerForm.email.$dirty && !$v.registerForm.email.required' class='animated shake') 邮箱不能为空
+                .error-tip(v-else-if='$v.registerForm.email.$dirty && !$v.registerForm.email.email' class='animated shake') 邮箱格式不合法
               .group
-                input.button(type='submit', value='Sign Up')
+                input.button(type='submit', value='Sign Up' @click='handleLoginUp')
               .hr
               .foot-lnk
                 label(for='tab-1') Already Member?
@@ -47,20 +60,51 @@
 
 <script>
 import { Toast } from 'mint-ui'
-import { validUsername } from '_u/validate'
+import { required, sameAs, email, minLength, maxLength, alphaNum } from 'vuelidate/lib/validators'
 export default {
   name: 'Login',
   data() {
     return {
       loginForm: {
-        username: 'ljq',
-        password: '123456'
+        username: '',
+        password: ''
       },
       registerForm: {
-        username: 'ljq',
-        password: '123456',
-        repeat_password: '123456',
-        email: '265***165@qq.com'
+        username: '',
+        password: '',
+        repeat_password: '',
+        email: ''
+      }
+    }
+  },
+  validations: {
+    loginForm: {
+      username: {
+        required
+      },
+      password: {
+        required
+      }
+    },
+    registerForm: {
+      username: {
+        required,
+        alphaNum,
+        minLength: minLength(6),
+        maxLength: maxLength(18)
+      },
+      password: {
+        required,
+        alphaNum,
+        minLength: minLength(6),
+        maxLength: maxLength(18)
+      },
+      repeat_password: {
+        sameAsPassword: sameAs('password')
+      },
+      email: {
+        required,
+        email
       }
     }
   },
@@ -72,8 +116,33 @@ export default {
         duration: 5000
       })
     },
-    check_password() {
-      this.showTip(validUsername(this.loginForm.password))
+    handleLoginIn() {
+      console.log('submit login in')
+      this.$v.loginForm.$touch()
+      if (this.$v.loginForm.$invalid) {
+        this.showTip('请填写正确的用户名和密码！')
+        this.$v.loginForm.$reset()
+        setTimeout(() => {
+          this.$v.loginForm.$touch()
+        }, 10)
+      } else {
+        // 调用登录验证api
+        this.showTip('登录中~~~')
+      }
+    },
+    handleLoginUp() {
+      console.log('submit login up')
+      this.$v.registerForm.$touch()
+      if (this.$v.registerForm.$invalid) {
+        this.showTip('请输入正确的个人信息！')
+        this.$v.registerForm.$reset()
+        setTimeout(() => {
+          this.$v.registerForm.$touch()
+        }, 10)
+      } else {
+        // 调用注册api
+        this.showTip('注册成功')
+      }
     }
   }
 }
@@ -99,6 +168,14 @@ export default {
 :after,
 :before {
   box-sizing: border-box;
+}
+.error-tip {
+  font-size: 0.75rem;
+  color: #f57f6c;
+  line-height: 1;
+  display: block;
+  margin-left: 14px;
+  margin-bottom: -0.75rem;
 }
 .clearfix:after,
 .clearfix:before {
