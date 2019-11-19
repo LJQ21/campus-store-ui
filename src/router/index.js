@@ -13,6 +13,11 @@ const routes = [
     path: '/mime',
     name: 'Mime',
     component: () => import('@/views/mime/index')
+  },
+  {
+    path: '/cart',
+    name: 'Cart',
+    component: () => import('@/views/cart/index')
   }
 ]
 
