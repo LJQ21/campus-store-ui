@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { Toast } from 'mint-ui'
+import { Notify } from 'vant'
 import { required, sameAs, email, minLength, maxLength, alphaNum } from 'vuelidate/lib/validators'
 export default {
   name: 'Login',
@@ -109,39 +109,35 @@ export default {
     }
   },
   methods: {
-    showTip(tip) {
-      Toast({
-        message: tip,
-        position: 'top',
-        duration: 5000
-      })
+    showNotify(type, message) {
+      Notify({ type: type, message: message })
     },
     handleLoginIn() {
       console.log('submit login in')
       this.$v.loginForm.$touch()
       if (this.$v.loginForm.$invalid) {
-        this.showTip('请填写正确的用户名和密码！')
+        this.showNotify('warning', '账号或密码错误！')
         this.$v.loginForm.$reset()
         setTimeout(() => {
           this.$v.loginForm.$touch()
         }, 10)
       } else {
         // 调用登录验证api
-        this.showTip('登录中~~~')
+        this.showNotify('success', '登录成功！')
       }
     },
     handleLoginUp() {
       console.log('submit login up')
       this.$v.registerForm.$touch()
       if (this.$v.registerForm.$invalid) {
-        this.showTip('请输入正确的个人信息！')
+        this.showNotify('warning', '请输入合法信息！')
         this.$v.registerForm.$reset()
         setTimeout(() => {
           this.$v.registerForm.$touch()
         }, 10)
       } else {
         // 调用注册api
-        this.showTip('注册成功')
+        this.showNotify('success', '注册成功！')
       }
     }
   }
