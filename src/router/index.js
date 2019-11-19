@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/login-register/index')
+    component: () => import('@/views/login/index')
   },
   {
     path: '/mime',

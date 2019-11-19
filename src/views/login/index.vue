@@ -4,17 +4,17 @@
       .login-wrap
         .login-html
           input#tab-1.sign-in(type='radio', name='tab', checked='')
-          label.tab(for='tab-1') Sign In
+          label.tab(for='tab-1') 登录
           input#tab-2.sign-up(type='radio', name='tab')
-          label.tab(for='tab-2') Sign Up
+          label.tab(for='tab-2')
           .login-form
             .sign-in-htm
               .group
-                label.label(for='user') Username
+                label.label(for='user') 用户名
                 input#user.input(type='text' v-model.trim='$v.loginForm.username.$model' @blur='$v.loginForm.username.$touch')
                 .error-tip(v-if='$v.loginForm.username.$dirty && !$v.loginForm.username.required' class='animated shake') 用户名不能为空
               .group
-                label.label(for='pass') Password
+                label.label(for='pass') 密码
                 input#pass.input(type='password', data-type='password' v-model.trim='$v.loginForm.password.$model' @blur='$v.loginForm.password.$touch')
                 .error-tip(v-if='$v.loginForm.password.$dirty && !$v.loginForm.password.required' class='animated shake') 不能为空
               .group
@@ -23,57 +23,52 @@
                   span.icon
                   |  Keep me Signed in
               .group
-                input.button(type='submit', value='Sign In' @click='handleLoginIn')
+                input.button(type='submit', value='登录' @click='handleLoginIn')
               .hr
               .foot-lnk
-                a(href='#forgot') Forgot Password?
-            .sign-up-htm
+                label(for='tab-2') 短信登录
+              br
+              .foot-lnk
+                a(href='#forgot') 忘记密码?
+            .sign-in-phone
               .group
-                label.label(for='user') Username
-                input#user.input(type='text' v-model.trim='$v.registerForm.username.$model' @blur='$v.registerForm.username.$touch')
-                .error-tip(v-if='$v.registerForm.username.$dirty && !$v.registerForm.username.required' class='animated shake') 不能为空
-                .error-tip(v-else-if='$v.registerForm.username.$dirty && !$v.registerForm.username.alphaNum' class='animated shake') 用户名名由字母或数字构成
-                .error-tip(v-else-if='$v.registerForm.username.$dirty && !$v.registerForm.username.minLength' class='animated shake') 密码长度不得少于6位
-                .error-tip(v-else-if='$v.registerForm.username.$dirty && !$v.registerForm.username.maxLength' class='animated shake') 密码长度不得超过18位
+                label.label(for='user') 手机号
+                input#user.input(type='text' v-model.trim='$v.registerByPhone.phone.$model' @blur='$v.registerByPhone.phone.$touch')
+                .error-tip(v-if='$v.registerByPhone.phone.$dirty && !$v.registerByPhone.phone.required' class='animated shake') 手机号不能为空
+                .error-tip(v-else-if='$v.registerByPhone.phone.$dirty && !$v.registerByPhone.phone.phone' class='animated shake') 手机号码有误
+                .error-tip(v-else-if='$v.registerByPhone.valiNum.$dirty && !$v.registerByPhone.valiNum.required' class='animated shake') 验证码不能为空
+                .error-tip(v-else-if='$v.registerByPhone.valiNum.$dirty && !$v.registerByPhone.valiNum.numeric' class='animated shake') 验证码不合法
+              label.label(for='ver-code' style='font-size: 12px; color: #aaa;') 验证码
+              van-row.verification
+                van-col(span='12')
+                  van-button(type='primary' round @click='sendNum') 发送验证码
+                van-col(span='1')
+                  van-count-down.count-down(:time='time' format='ss' :auto-start='false' ref='countDown')
+                van-col(span='11')
+                  input.verification_code(type='text' v-model.trim='$v.registerByPhone.valiNum.$model' @blur='$v.registerByPhone.valiNum.$touch')
               .group
-                label.label(for='pass') Password
-                input#pass.input(type='password', data-type='password' v-model.trim='$v.registerForm.password.$model' @blur='$v.registerForm.password.$touch')
-                .error-tip(v-if='$v.registerForm.password.$dirty && !$v.registerForm.password.required' class='animated shake') 密码为空
-                .error-tip(v-else-if='$v.registerForm.password.$dirty && !$v.registerForm.password.alphaNum' class='animated shake') 用户名名由字母或数字构成
-                .error-tip(v-else-if='$v.registerForm.password.$dirty && !$v.registerForm.password.minLength' class='animated shake') 密码长度不得少于4位
-                .error-tip(v-else-if='$v.registerForm.password.$dirty && !$v.registerForm.password.maxLength' class='animated shake') 密码长度不得超过18位
-              .group
-                label.label(for='pass') Repeat Password
-                input#pass.input(type='password', data-type='password' v-model.trim='$v.registerForm.repeat_password.$model')
-                .error-tip(v-if='$v.registerForm.repeat_password.$dirty && !$v.registerForm.repeat_password.sameAsPassword' class='animated shake') 密码不一致
-              .group
-                label.label(for='pass') Email Address
-                input#pass.input(type='text' v-model='$v.registerForm.email.$model' @blur='$v.registerForm.email.$touch')
-                .error-tip(v-if='$v.registerForm.email.$dirty && !$v.registerForm.email.required' class='animated shake') 邮箱不能为空
-                .error-tip(v-else-if='$v.registerForm.email.$dirty && !$v.registerForm.email.email' class='animated shake') 邮箱格式不合法
-              .group
-                input.button(type='submit', value='Sign Up' @click='handleLoginUp')
+                input.button(type='submit', value='登录' @click='handleLoginUp')
               .hr
               .foot-lnk
-                label(for='tab-1') Already Member?
+                label(for='tab-1') 密码登录
 </template>
 
 <script>
 import { Notify } from 'vant'
-import { required, sameAs, email, minLength, maxLength, alphaNum } from 'vuelidate/lib/validators'
+import { required, numeric, helpers } from 'vuelidate/lib/validators'
+const phone = helpers.regex('phone', /^1[3456789]\d{9}$/)
 export default {
   name: 'Login',
   data() {
     return {
+      time: 2 * 60 * 1000,
       loginForm: {
         username: '',
         password: ''
       },
-      registerForm: {
-        username: '',
-        password: '',
-        repeat_password: '',
-        email: ''
+      registerByPhone: {
+        phone: '',
+        valiNum: ''
       }
     }
   },
@@ -86,29 +81,27 @@ export default {
         required
       }
     },
-    registerForm: {
-      username: {
+    registerByPhone: {
+      phone: {
         required,
-        alphaNum,
-        minLength: minLength(6),
-        maxLength: maxLength(18)
+        phone
       },
-      password: {
+      valiNum: {
         required,
-        alphaNum,
-        minLength: minLength(6),
-        maxLength: maxLength(18)
-      },
-      repeat_password: {
-        sameAsPassword: sameAs('password')
-      },
-      email: {
-        required,
-        email
+        numeric
       }
     }
   },
   methods: {
+    sendNum() {
+      this.$v.registerByPhone.phone.$touch()
+      if (this.$v.registerByPhone.phone.$invalid) {
+        this.showNotify('warning', '请输入手机号！')
+      } else {
+        this.$refs.countDown.start()
+        this.showNotify('success', '验证码发送成功！')
+      }
+    },
     showNotify(type, message) {
       Notify({ type: type, message: message })
     },
@@ -128,16 +121,16 @@ export default {
     },
     handleLoginUp() {
       console.log('submit login up')
-      this.$v.registerForm.$touch()
-      if (this.$v.registerForm.$invalid) {
+      this.$v.registerByPhone.$touch()
+      if (this.$v.registerByPhone.$invalid) {
         this.showNotify('warning', '请输入合法信息！')
-        this.$v.registerForm.$reset()
+        this.$v.registerByPhone.$reset()
         setTimeout(() => {
-          this.$v.registerForm.$touch()
+          this.$v.registerByPhone.$touch()
         }, 10)
       } else {
         // 调用注册api
-        this.showNotify('success', '注册成功！')
+        this.showNotify('success', '登录成功！')
       }
     }
   }
@@ -209,7 +202,7 @@ button {
   background: rgba(40, 57, 101, 0.9);
 }
 .login-html .sign-in-htm,
-.login-html .sign-up-htm {
+.login-html .sign-in-phone {
   top: 0;
   left: 0;
   right: 0;
@@ -341,7 +334,7 @@ button {
   -ms-transform: rotate(0);
   transform: rotate(0);
 }
-.login-html .sign-up:checked + .tab + .login-form .sign-up-htm {
+.login-html .sign-up:checked + .tab + .login-form .sign-in-phone {
   -webkit-transform: rotate(0);
   -ms-transform: rotate(0);
   transform: rotate(0);
@@ -353,5 +346,27 @@ button {
 }
 .foot-lnk {
   text-align: center;
+}
+.verification {
+  margin: 10px 0 10px 0;
+  &_code {
+    width: 100%;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+.count-down {
+  font-size: 12px;
+  text-align:center;
+  line-height: 25px;
+  color: #aaa;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border: none;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.1);
 }
 </style>

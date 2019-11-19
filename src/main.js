@@ -4,7 +4,7 @@ import router from '@/router'
 import store from '@/store'
 import '_lib/Animate/animate.min.css'
 import Vuelidate from 'vuelidate' // 引入表单验证
-import { Notify, Tabbar, TabbarItem, NavBar, Button, Row, Col, Cell, CellGroup, Icon, Checkbox, CheckboxGroup, Card, SubmitBar } from 'vant'
+import { Notify, Tabbar, TabbarItem, NavBar, Button, Row, Col, Cell, CellGroup, Icon, Checkbox, CheckboxGroup, Card, SubmitBar, CountDown } from 'vant'
 
 Vue.use(Vuelidate)
 Vue.use(Notify)
@@ -17,6 +17,7 @@ Vue.use(Icon)
 Vue.use(Checkbox).use(CheckboxGroup)
 Vue.use(Card)
 Vue.use(SubmitBar)
+Vue.use(CountDown)
 
 Vue.config.productionTip = false
 
