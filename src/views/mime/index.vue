@@ -25,16 +25,10 @@
 
 <script>
 import Tabbar from '_c/Tabbar/index'
-import { Row, Col, Icon, Cell, CellGroup } from 'vant'
 export default {
   name: 'Mime',
   components: {
-    Tabbar,
-    [Row.name]: Row,
-    [Col.name]: Col,
-    [Icon.name]: Icon,
-    [Cell.name]: Cell,
-    [CellGroup.name]: CellGroup
+    Tabbar
   },
   data() {
     return {

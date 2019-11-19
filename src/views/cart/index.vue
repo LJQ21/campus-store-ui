@@ -8,20 +8,16 @@
 </template>
 
 <script>
-import { Checkbox, CheckboxGroup, Card, SubmitBar, Toast } from 'vant'
+import { Toast } from 'vant'
 import Tabbar from '_c/Tabbar/index'
 export default {
   name: 'Cart',
   components: {
-    Tabbar,
-    [Card.name]: Card,
-    [Checkbox.name]: Checkbox,
-    [SubmitBar.name]: SubmitBar,
-    [CheckboxGroup.name]: CheckboxGroup
+    Tabbar
   },
   data() {
     return {
-      tabNum: '3',
+      tabNum: 2,
       checkedGoods: ['1', '2', '3'],
       goods: [{
         id: '1',
