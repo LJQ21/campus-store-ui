@@ -10,9 +10,9 @@ const routes = [
     component: () => import('@/views/login-register/index')
   },
   {
-    path: '/about-me',
-    name: 'AboutMe',
-    component: () => import('@/views/about-me/index')
+    path: '/mime',
+    name: 'Mime',
+    component: () => import('@/views/mime/index')
   }
 ]
 

@@ -1,5 +1,5 @@
 <template lang='pug'>
-  #about-me
+  #mime
     van-nav-bar(title="标题" left-text="返回" right-text="按钮" left-arrow)
     Tabbar
 </template>
@@ -7,7 +7,7 @@
 <script>
 import Tabbar from '_c/Tabbar/index'
 export default {
-  name: 'AboutMe',
+  name: 'Mime',
   components: { Tabbar }
 }
 </script>
