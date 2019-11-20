@@ -27,6 +27,9 @@
           van-col(span='11')
             input.input(type='text' placeholder='验证码' v-model.trim='$v.stepP.valiNum.$model' @blur='$v.stepP.valiNum.$touch')
         van-button(type='primary' @click='toRegister') 注册
+      .register-form_tab(v-if='active==2' class='animated fadeInRight')
+        h2.register-form_tab_title 恭喜你，注册成功
+        router-link.register-form_tab_subtitle(to='/login') 登录
 </template>
 
 <script>
@@ -115,6 +118,7 @@ export default {
       } else {
         // 调用注册Api
         Toast.success('注册成功！')
+        this.active = this.active + 1
       }
     }
   },
@@ -176,7 +180,7 @@ export default {
   background: url('../../assets/images/bg.jpg');
   .register-form {
     opacity: 0.9;
-    width: 400px;
+    width: 93%;
     margin: 50px auto;
     text-align: center;
     position: relative;

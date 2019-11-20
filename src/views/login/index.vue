@@ -30,6 +30,9 @@
               br
               .foot-lnk
                 a(href='#forgot') 忘记密码?
+              br
+              .foot-lnk
+                router-link(to='/register') 我要注册?
             .sign-in-phone
               .group
                 label.label(for='user') 手机号
