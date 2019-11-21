@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      tabNum: 2,
+      tabNum: 3,
       checkedGoods: ['1', '2', '3'],
       goods: [{
         id: '1',

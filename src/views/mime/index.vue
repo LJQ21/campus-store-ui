@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      tabNum: 3
+      tabNum: 4
     }
   }
 }

@@ -10,6 +10,21 @@ const routes = [
     component: () => import('@/views/login/index')
   },
   {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/register/index')
+  },
+  {
+    path: '/home',
+    name: 'Home',
+    component: () => import('@/views/home/index')
+  },
+  {
+    path: '/form',
+    name: 'Form',
+    component: () => import('@/views/form/index')
+  },
+  {
     path: '/mime',
     name: 'Mime',
     component: () => import('@/views/mime/index')
@@ -18,11 +33,6 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: () => import('@/views/cart/index')
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: () => import('@/views/register/index')
   }
 ]
 

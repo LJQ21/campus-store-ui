@@ -4,7 +4,7 @@ import router from '@/router'
 import store from '@/store'
 import '_lib/Animate/animate.min.css'
 import Vuelidate from 'vuelidate' // 引入表单验证
-import { Notify, Tabbar, TabbarItem, NavBar, Button, Row, Col, Cell, CellGroup, Icon, Checkbox, CheckboxGroup, Card, SubmitBar, CountDown, Step, Steps } from 'vant'
+import { Notify, Tabbar, TabbarItem, NavBar, Button, Row, Col, Cell, CellGroup, Icon, Checkbox, CheckboxGroup, Card, SubmitBar, CountDown, Step, Steps, Search, Swipe, SwipeItem, Lazyload, Sku, Tag, Grid, GridItem, Image, Divider, Sticky, Field } from 'vant'
 
 Vue.use(Vuelidate)
 Vue.use(Notify)
@@ -19,6 +19,17 @@ Vue.use(Card)
 Vue.use(SubmitBar)
 Vue.use(CountDown)
 Vue.use(Step).use(Steps)
+Vue.use(Search)
+Vue.use(Swipe).use(SwipeItem)
+// options 为可选参数，无则不传
+Vue.use(Lazyload)
+Vue.use(Sku)
+Vue.use(Tag)
+Vue.use(Grid).use(GridItem)
+Vue.use(Image)
+Vue.use(Divider) // 分割线
+Vue.use(Sticky)
+Vue.use(Field) // 输入框
 
 Vue.config.productionTip = false
 
