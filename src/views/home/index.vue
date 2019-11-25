@@ -21,7 +21,7 @@
       van-grid-item(icon='photo-o', text='二级')
       van-grid-item(icon='photo-o', text='会计')
       van-grid-item(icon='photo-o', text='教资')
-      van-grid-item(icon='ellipsis', text='分类')
+      van-grid-item(icon='ellipsis', text='分类' @click='toClassify')
     van-divider 今日推荐
     van-grid(:border='false', :column-num='3')
       van-grid-item
@@ -127,6 +127,9 @@ export default {
   methods: {
     toSearch() {
       this.$router.push('/search')
+    },
+    toClassify() {
+      this.$router.push('/classify')
     }
   }
 }
