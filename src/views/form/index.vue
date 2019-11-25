@@ -1,17 +1,21 @@
 <template lang='pug'>
-  #form
-    van-nav-bar(title='发布商品')
-    van-cell-group
-      van-field(v-model='goodsName' label='商品名称' placeholder='请输入用户名')
-      van-field(readonly clickable label='商品类别' :value='goodsType' placeholder='选择分类' @click='showPicker = true')
-      van-popup(v-model='showPicker' position='bottom')
-        van-picker(show-toolbar :columns='columns' @cancel='showPicker = false' @confirm='onConfirm')
-      van-field(v-model='goodsPrice' label='商品价格' placeholder='请输入商品价格')
-      h2.title 图片上传
-      van-uploader(v-model='fileList' multiple :max-count='2' :before-read='asyncBeforeRead')
+  #form-container
+    .form-header
+      van-nav-bar(title='发布商品' right-text='我的发布' @click-right='onChickRight')
+    .form-content
       van-cell-group
-        van-field(v-model='message', rows='2', autosize='', label='商品描述', type='textarea', maxlength='50', placeholder='请输入留言', show-word-limit='')
-      van-button(type='primary') 保存
+        van-field(v-model='goodsName' label='商品名称' placeholder='请输入商品名称')
+        van-field(readonly clickable label='商品类别' :value='goodsType' placeholder='选择商品分类' @click='showPicker = true')
+        van-popup(v-model='showPicker' position='bottom')
+          van-picker(show-toolbar :columns='columns' @cancel='showPicker = false' @confirm='onConfirm')
+        van-field(v-model='goodsPrice' label='商品价格' placeholder='请输入商品价格' right-icon='after-sale')
+        h2.title 图片上传
+        van-uploader(v-model='fileList' multiple :max-count='2' :before-read='asyncBeforeRead')
+        van-cell-group
+          van-field(v-model='message', rows='2', autosize='', label='商品描述', type='textarea', maxlength='50', placeholder='请输入商品描述', show-word-limit='')
+    .form-btn-container
+        van-button(type='primary') 发布
+    .form-btmnav
       Tabbar(:tabNum='tabNum')
 </template>
 
@@ -51,21 +55,29 @@ export default {
           resolve()
         }
       })
+    },
+    onChickRight() {
+      Toast('我的发布历史')
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-#form {
-  text-align: center;
+#form-container {
   margin: 0 auto;
-  .title {
-    margin: 0;
-    padding: 32px 16px 16px;
-    color:rgba(69, 90, 100, 0.6);
-    font-weight: normal;
-    font-size: 14px;
+  .form-content {
+    padding: 10px;
+    .title {
+      margin: 0;
+      padding: 32px 16px 16px;
+      color:rgba(69, 90, 100, 0.6);
+      font-weight: normal;
+      font-size: 14px;
+    }
+  }
+  .form-btn-container {
+    text-align: center;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template lang='pug'>
-  #home
+  #home-container
     van-nav-bar(title='校园二手商城')
     van-sticky
       van-search(placeholder='请输入搜索关键词' v-model='searchKey')
@@ -128,7 +128,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-#home {
+#home-container {
   .topbar {
     width: 100%;
     .topbar-tree {
