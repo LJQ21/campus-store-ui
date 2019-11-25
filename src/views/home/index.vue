@@ -2,7 +2,7 @@
   #home-container
     van-nav-bar(title='校园二手商城')
     van-sticky
-      van-search(placeholder='请输入搜索关键词' v-model='searchKey')
+      van-search(placeholder='请输入搜索关键词' v-model='searchKey' @click='toSearch')
     // 顶部栏
       van-row.topbar
         van-col(span='2').topbar-tree
@@ -122,6 +122,11 @@ export default {
         // 默认商品 sku 缩略图
         picture: 'https://img.yzcdn.cn/1.jpg'
       }
+    }
+  },
+  methods: {
+    toSearch() {
+      this.$router.push('/search')
     }
   }
 }
