@@ -99,7 +99,13 @@ export default {
         {
           path: '/details',
           query: {
-            product: product
+            num: product.num,
+            price: product.price,
+            desc: product.desc,
+            title: product.title,
+            thumb: product.thumb,
+            express: product.express,
+            remain: product.remain
           }
         }
       )

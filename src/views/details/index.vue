@@ -34,7 +34,15 @@ export default {
   name: 'Details',
   data() {
     return {
-      goods: this.$route.query.product
+      goods: {
+        num: this.$route.query.num,
+        price: this.$route.query.price,
+        desc: this.$route.query.desc,
+        title: this.$route.query.title,
+        thumb: this.$route.query.thumb,
+        express: this.$route.query.express,
+        remain: this.$route.query.remain
+      }
     }
   },
   methods: {

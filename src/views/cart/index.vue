@@ -1,10 +1,15 @@
 <template lang='pug'>
-  #cart
-    van-checkbox-group.card-goods(v-model='checkedGoods')
-      van-checkbox.card-goods__item(v-for='item in goods', :key='item.id', :name='item.id')
-        van-card(:title='item.title', :desc='item.desc', :num='item.num', :price='formatPrice(item.price)', :thumb='item.thumb')
-    van-submit-bar(:price='totalPrice', :disabled='!checkedGoods.length', :button-text='submitBarText', @submit='onSubmit')
-    Tabbar(:tabNum='tabNum')
+  #cart-container
+    .car-hearder
+      van-sticky
+        van-nav-bar(title='详情' left-text='返回' left-arrow @click-left='goback')
+    .car-content
+      van-checkbox-group.card-goods(v-model='checkedGoods')
+        van-checkbox.card-goods__item(v-for='item in goods', :key='item.id', :name='item.id')
+          van-card(:title='item.title', :desc='item.desc', :num='item.num', :price='formatPrice(item.price)', :thumb='item.thumb')
+      van-submit-bar(:price='totalPrice', :disabled='!checkedGoods.length', :button-text='submitBarText', @submit='onSubmit')
+    .car-btmnar
+      Tabbar(:tabNum='tabNum')
 </template>
 
 <script>
@@ -58,13 +63,16 @@ export default {
     },
     onSubmit() {
       Toast('点击结算')
+    },
+    goback() {
+      this.$router.go(-1)
     }
   }
 }
 </script>
 
 <style lang="less">
-#cart {
+#cart-container {
   .card-goods {
   padding: 10px 0;
   background-color: #fff;
