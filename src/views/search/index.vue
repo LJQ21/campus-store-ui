@@ -2,8 +2,10 @@
   #search-container
     .search-header
       van-sticky
-        van-search(placeholder='请输入搜索关键词' v-model='searchKey' @search='onSearch' show-action)
-          dib(slot='label') 商品
+        van-nav-bar(title='校园二手商城' left-text='返回' left-arrow @click-left='goBack')
+        van-search(placeholder='请输入搜索关键词' v-model='searchKey' @search='onSearch')
+        // 原搜索框样式
+          dib(slot='label') 商品show-action
           div(slot='action' @click='goBack') 返回
     .search-content
       van-card(v-for='product in products' :key='product.id' :num='product.num' :price='product.price' :desc='product.desc' :title='product.title' :thumb='product.thumb')
