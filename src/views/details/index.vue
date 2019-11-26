@@ -2,7 +2,7 @@
   #details-container
     .details-header
       van-sticky
-        van-nav-bar(title='详情' left-text='返回' left-arrow @click-left='goback')
+        van-nav-bar(title='详情' left-text='返回' right-text='举报' left-arrow @click-left='goback')
     .details-content
       // 商品图片
       van-swipe.goods-swipe(:autoplay='3000')

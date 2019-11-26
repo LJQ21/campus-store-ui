@@ -9,7 +9,7 @@
           van-sidebar(v-model='activeKey')
             van-sidebar-item(v-for='classifyItem in classify' :title='classifyItem')
       .classify-main
-        van-card(v-for='product in products' :key='product.id' :num='product.num' :price='product.price' :desc='product.desc' :title='product.title' :thumb='product.thumb')
+        van-card(v-for='product in products' :key='product.id' :num='product.num' :price='product.price' :desc='product.desc' :title='product.title' :thumb='product.thumb' @click='toDetails(product)')
 </template>
 
 <script>
@@ -26,7 +26,9 @@ export default {
           price: '2.00',
           desc: '描述信息',
           title: '商品标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg'],
+          express: '包邮',
+          remain: '10'
         },
         {
           id: 2,
@@ -34,7 +36,9 @@ export default {
           price: '2.00',
           desc: '描述信息',
           title: '商品标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg'],
+          express: '包邮',
+          remain: '10'
         },
         {
           id: 3,
@@ -42,7 +46,9 @@ export default {
           price: '2.00',
           desc: '描述信息',
           title: '商品标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg'],
+          express: '包邮',
+          remain: '10'
         },
         {
           id: 4,
@@ -50,7 +56,9 @@ export default {
           price: '2.00',
           desc: '描述信息',
           title: '商品标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg'],
+          express: '包邮',
+          remain: '10'
         },
         {
           id: 5,
@@ -58,7 +66,9 @@ export default {
           price: '2.00',
           desc: '描述信息',
           title: '商品标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg'],
+          express: '包邮',
+          remain: '10'
         },
         {
           id: 6,
@@ -66,7 +76,9 @@ export default {
           price: '2.00',
           desc: '描述信息',
           title: '商品标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg'],
+          express: '包邮',
+          remain: '10'
         },
         {
           id: 7,
@@ -74,7 +86,9 @@ export default {
           price: '2.00',
           desc: '描述信息',
           title: '商品标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg'],
+          express: '包邮',
+          remain: '10'
         }
       ]
     }
@@ -85,6 +99,22 @@ export default {
     },
     onClickRight() {
 
+    },
+    toDetails(product) {
+      this.$router.push(
+        {
+          path: '/details',
+          query: {
+            num: product.num,
+            price: product.price,
+            desc: product.desc,
+            title: product.title,
+            thumb: product.thumb,
+            express: product.express,
+            remain: product.remain
+          }
+        }
+      )
     }
   }
 }

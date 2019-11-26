@@ -3,6 +3,7 @@ import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store'
 import '_lib/Animate/animate.min.css'
+import '@/permission.js'
 import Vuelidate from 'vuelidate' // 引入表单验证
 import { Notify, Tabbar, TabbarItem, NavBar, Button, Row, Col, Cell, CellGroup, Icon, Checkbox, CheckboxGroup, Card, SubmitBar, CountDown, Step, Steps, Search, Swipe, SwipeItem, Lazyload, Sku, Tag, Grid, GridItem, Image, Divider, Sticky, Field, Picker, Popup, Uploader, Sidebar, SidebarItem, GoodsAction, GoodsActionIcon, GoodsActionButton } from 'vant'
 
