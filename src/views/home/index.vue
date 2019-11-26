@@ -64,21 +64,21 @@ export default {
           price: '2.00',
           desc: '描述',
           title: '标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg']
         },
         {
           num: '2',
           price: '2.00',
           desc: '描述',
           title: '标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg']
         },
         {
           num: '2',
           price: '2.00',
           desc: '描述',
           title: '标题',
-          thumb: 'https://img.yzcdn.cn/vant/t-thirt.jpg'
+          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg']
         }
       ],
       images: [
@@ -120,7 +120,8 @@ export default {
     margin-bottom: 50px;
     .swipe {
       .swipe-image {
-        max-width: 400px;
+        width: 100%;
+        display: block;
       }
     }
   }
