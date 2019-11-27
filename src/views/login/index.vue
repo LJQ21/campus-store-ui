@@ -11,19 +11,19 @@
             .sign-in-htm
               .group
                 label.label(for='user') 用户名
-                input#user.input(type='text' v-model.trim='$v.loginForm.username.$model' @blur='$v.loginForm.username.$touch')
-                .error-tip(v-if='$v.loginForm.username.$dirty && !$v.loginForm.username.required' class='animated shake') 用户名不能为空
+                input#user.input(type='text' v-model.trim='$v.accountForm.account.$model' @blur='$v.accountForm.account.$touch')
+                .error-tip(v-if='$v.accountForm.account.$dirty && !$v.accountForm.account.required' class='animated shake') 用户名不能为空
               .group
                 label.label(for='pass') 密码
-                input#pass.input(type='password', data-type='password' v-model.trim='$v.loginForm.password.$model' @blur='$v.loginForm.password.$touch')
-                .error-tip(v-if='$v.loginForm.password.$dirty && !$v.loginForm.password.required' class='animated shake') 不能为空
+                input#pass.input(type='password', data-type='password' v-model.trim='$v.accountForm.password.$model' @blur='$v.accountForm.password.$touch')
+                .error-tip(v-if='$v.accountForm.password.$dirty && !$v.accountForm.password.required' class='animated shake') 不能为空
               .group
                 input#check.check(type='checkbox', checked='')
                 label(for='check')
                   span.icon
                   |  Keep me Signed in
               .group
-                input.button(type='submit', value='登录' @click='handleLoginIn')
+                input.button(type='submit', value='登录' @click='handleLoginByU')
               .hr
               .foot-lnk
                 label(for='tab-2') 短信登录
@@ -36,11 +36,11 @@
             .sign-in-phone
               .group
                 label.label(for='user') 手机号
-                input#user.input(type='text' v-model.trim='$v.registerByPhone.phone.$model' @blur='$v.registerByPhone.phone.$touch')
-                .error-tip(v-if='$v.registerByPhone.phone.$dirty && !$v.registerByPhone.phone.required' class='animated shake') 手机号不能为空
-                .error-tip(v-else-if='$v.registerByPhone.phone.$dirty && !$v.registerByPhone.phone.phone' class='animated shake') 手机号码有误
-                .error-tip(v-else-if='$v.registerByPhone.valiNum.$dirty && !$v.registerByPhone.valiNum.required' class='animated shake') 验证码不能为空
-                .error-tip(v-else-if='$v.registerByPhone.valiNum.$dirty && !$v.registerByPhone.valiNum.numeric' class='animated shake') 验证码不合法
+                input#user.input(type='text' v-model.trim='$v.phoneForm.phone.$model' @blur='$v.phoneForm.phone.$touch')
+                .error-tip(v-if='$v.phoneForm.phone.$dirty && !$v.phoneForm.phone.required' class='animated shake') 手机号不能为空
+                .error-tip(v-else-if='$v.phoneForm.phone.$dirty && !$v.phoneForm.phone.phone' class='animated shake') 手机号码有误
+                .error-tip(v-else-if='$v.phoneForm.valiNum.$dirty && !$v.phoneForm.valiNum.required' class='animated shake') 验证码不能为空
+                .error-tip(v-else-if='$v.phoneForm.valiNum.$dirty && !$v.phoneForm.valiNum.numeric' class='animated shake') 验证码不合法
               label.label(for='ver-code' style='font-size: 12px; color: #aaa;') 验证码
               van-row.verification
                 van-col(span='12')
@@ -48,16 +48,15 @@
                 van-col(span='1')
                   van-count-down.count-down(:time='time' format='ss' :auto-start='false' ref='countDown')
                 van-col(span='11')
-                  input.verification_code(type='text' v-model.trim='$v.registerByPhone.valiNum.$model' @blur='$v.registerByPhone.valiNum.$touch')
+                  input.verification_code(type='text' v-model.trim='$v.phoneForm.valiNum.$model' @blur='$v.phoneForm.valiNum.$touch')
               .group
-                input.button(type='submit', value='登录' @click='handleLoginUp')
+                input.button(type='submit', value='登录' @click='handleLoginByP')
               .hr
               .foot-lnk
                 label(for='tab-1') 密码登录
 </template>
 
 <script>
-import { Notify } from 'vant'
 import { required, numeric, helpers } from 'vuelidate/lib/validators'
 const phone = helpers.regex('phone', /^1[3456789]\d{9}$/)
 export default {
@@ -65,26 +64,28 @@ export default {
   data() {
     return {
       time: 2 * 60 * 1000,
-      loginForm: {
-        username: '',
+      accountForm: {
+        account: '',
         password: ''
       },
-      registerByPhone: {
+      phoneForm: {
         phone: '',
         valiNum: ''
-      }
+      },
+      redirect: undefined,
+      otherQuery: {}
     }
   },
   validations: {
-    loginForm: {
-      username: {
+    accountForm: {
+      account: {
         required
       },
       password: {
         required
       }
     },
-    registerByPhone: {
+    phoneForm: {
       phone: {
         required,
         phone
@@ -95,46 +96,70 @@ export default {
       }
     }
   },
+  watch: {
+    $route: {
+      handler: function(route) {
+        const query = route.query
+        if (query) {
+          this.redirect = query.redirect
+          this.otherQuery = this.getOtherQuery(query)
+        }
+      },
+      immediate: true
+    }
+  },
   methods: {
     sendNum() {
-      this.$v.registerByPhone.phone.$touch()
-      if (this.$v.registerByPhone.phone.$invalid) {
-        this.showNotify('warning', '请输入手机号！')
+      this.$v.phoneForm.phone.$touch()
+      if (this.$v.phoneForm.phone.$invalid) {
+        this.$toast('请输入手机号！')
       } else {
         this.$refs.countDown.start()
-        this.showNotify('success', '验证码发送成功！')
+        this.$toast('验证码发送成功！')
       }
     },
-    showNotify(type, message) {
-      Notify({ type: type, message: message })
-    },
-    handleLoginIn() {
-      console.log('submit login in')
-      this.$v.loginForm.$touch()
-      if (this.$v.loginForm.$invalid) {
-        this.showNotify('warning', '账号或密码错误！')
-        this.$v.loginForm.$reset()
+    handleLoginByU() {
+      console.log('submit login by user')
+      this.$v.accountForm.$touch()
+      if (this.$v.accountForm.$invalid) {
+        this.$toast('账号或密码错误！')
+        this.$v.accountForm.$reset()
         setTimeout(() => {
-          this.$v.loginForm.$touch()
+          this.$v.accountForm.$touch()
         }, 10)
       } else {
         // 调用登录验证api
-        this.showNotify('success', '登录成功！')
+        console.log('登录成功！')
+        this.$store.dispatch('user/loginByAccount', this.accountForm)
+          .then(() => {
+            this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
     },
-    handleLoginUp() {
-      console.log('submit login up')
-      this.$v.registerByPhone.$touch()
-      if (this.$v.registerByPhone.$invalid) {
-        this.showNotify('warning', '请输入合法信息！')
-        this.$v.registerByPhone.$reset()
+    handleLoginByP() {
+      console.log('submit login by phone')
+      this.$v.phoneForm.$touch()
+      if (this.$v.phoneForm.$invalid) {
+        this.$toast('请输入合法信息！')
+        this.$v.phoneForm.$reset()
         setTimeout(() => {
-          this.$v.registerByPhone.$touch()
+          this.$v.phoneForm.$touch()
         }, 10)
       } else {
         // 调用注册api
-        this.showNotify('success', '登录成功！')
+        this.$toast('登录成功！')
       }
+    },
+    getOtherQuery(query) {
+      return Object.keys(query).reduce((acc, cur) => {
+        if (cur !== 'redirect') {
+          acc[cur] = query[cur]
+        }
+        return acc
+      }, {})
     }
   }
 }

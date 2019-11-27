@@ -3,19 +3,11 @@
     .register-form
       // 步骤条
       van-steps(:active='active', active-icon='success', active-color='#38f')
-        van-step 用户密码
         van-step 手机验证
+        van-step 用户信息
         van-step 完成
-      // 用户密码
-      .register-form_tab(v-if='active==0')
-        h2.register-form_tab_title 校园商城
-        h3.register-form_tab_subtitle {{ stepUTip }}
-        input.input(type='text' placeholder='请输入用户名' v-model.trim='$v.stepU.username.$model' @blur='$v.stepU.username.$touch')
-        input.input(type='password' placeholder='请输入密码' v-model.trim='$v.stepU.password.$model' @blur='$v.stepU.password.$touch')
-        input.input(type='password' placeholder='请确认密码' v-model.trim='$v.stepU.repeatPassword.$model' @blur='$v.stepU.repeatPassword.$touch')
-        van-button(type='primary' @click='clickNext') Next
       // 手机验证
-      .register-form_tab(v-if='active==1' class='animated fadeInRight')
+      .register-form_tab(v-if='active==0' class='animated fadeInRight')
         h2.register-form_tab_title 校园商城
         h3.register-form_tab_subtitle {{ setpPTip }}
         input.input(type='text' placeholder='请输入手机号' v-model.trim='$v.stepP.phone.$model' @blur='$v.stepP.phone.$touch')
@@ -26,6 +18,14 @@
             van-count-down.count-down(:time='time' format='ss' :auto-start='false' ref='countDown')
           van-col(span='11')
             input.input(type='text' placeholder='验证码' v-model.trim='$v.stepP.valiNum.$model' @blur='$v.stepP.valiNum.$touch')
+        van-button(type='primary' @click='clickNext') Next
+      // 用户密码
+      .register-form_tab(v-if='active==1' class='animated fadeInRight')
+        h2.register-form_tab_title 校园商城
+        h3.register-form_tab_subtitle {{ stepUTip }}
+        input.input(type='text' placeholder='请输入用户名' v-model.trim='$v.stepU.username.$model' @blur='$v.stepU.username.$touch')
+        input.input(type='password' placeholder='请输入密码' v-model.trim='$v.stepU.password.$model' @blur='$v.stepU.password.$touch')
+        input.input(type='password' placeholder='请确认密码' v-model.trim='$v.stepU.repeatPassword.$model' @blur='$v.stepU.repeatPassword.$touch')
         van-button(type='primary' @click='toRegister') 注册
       .register-form_tab(v-if='active==2' class='animated fadeInRight')
         h2.register-form_tab_title 恭喜你，注册成功
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { send, verify } from '@/api/user'
 import { Toast } from 'vant'
 import { required, helpers, alphaNum, sameAs, minLength, maxLength } from 'vuelidate/lib/validators'
 const phone = helpers.regex('phone', /^1[3456789]\d{9}$/)
@@ -93,12 +94,32 @@ export default {
         Toast.fail('请输入合法的手机号')
       } else {
         // 调用发送验证码Api
-        this.$refs.countDown.start()
-        Toast.success('验证码发送成功')
+        send(this.stepP.phone).then(response => {
+          this.$refs.countDown.start()
+          Toast.success('验证码发送成功')
+        }).catch(error => {
+          console.log(error)
+          Toast('验证码发送失败,请重试')
+        })
       }
     },
     clickNext() {
-      // 下一步
+        // 手机验证
+      this.$v.stepP.$touch()
+      if (this.$v.stepP.$invalid) {
+        Toast.fail('请输入正确的手机号和验证码！')
+      } else {
+        // 调用手机验证Api
+        verify(this.stepP.valiNum).then(res => {
+          Toast.success('验证通过！')
+          this.active = this.active + 1
+        }).catch(error => {
+          Toast('手机验证码错误')
+        })
+      }
+    },
+    toRegister() {
+      // 注册
       if (this.active === 0) {
         this.$v.stepU.$touch()
         if (this.$v.stepU.$invalid) {
@@ -107,17 +128,6 @@ export default {
           this.active = this.active + 1
         }
       } else {
-        this.active = this.active + 1
-      }
-    },
-    toRegister() {
-      // 注册
-      this.$v.stepP.$touch()
-      if (this.$v.stepP.$invalid) {
-        Toast.fail('注册失败!')
-      } else {
-        // 调用注册Api
-        Toast.success('注册成功！')
         this.active = this.active + 1
       }
     }
