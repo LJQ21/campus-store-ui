@@ -13,9 +13,11 @@
         van-cell
           .goods-title {{ goods.title }}
           .goods-price {{ formatPrice(goods.price) }}
-        van-cell.goods-express
-          van-col(span='10') 运费：{{ goods.express }}
-          van-col(span='14') 剩余：{{ goods.remain }}
+        van-cell.goods-purchasePrice
+          van-col(span='10') 原价：{{ goods.purchasePrice }}
+          van-col(span='14') 剩余：{{ goods.num }}
+        van-cell
+          .des 描述：{{ goods.desc }}
     .details-btmnar
       // 商品底部栏
       van-goods-action
@@ -35,13 +37,12 @@ export default {
   data() {
     return {
       goods: {
-        num: this.$route.query.num,
-        price: this.$route.query.price,
-        desc: this.$route.query.desc,
-        title: this.$route.query.title,
-        thumb: this.$route.query.thumb,
-        express: this.$route.query.express,
-        remain: this.$route.query.remain
+        num: this.$route.query.count,
+        price: this.$route.query.sellPrice,
+        desc: this.$route.query.des,
+        title: this.$route.query.name,
+        thumb: [this.$route.query.img],
+        purchasePrice: this.$route.query.purchasePrice
       }
     }
   },
@@ -50,7 +51,7 @@ export default {
       console.log(this.goods.thumb)
     },
     formatPrice() {
-      return '¥' + (this.goods.price / 100).toFixed(2)
+      return '¥' + (this.goods.price).toFixed(2)
     },
     goback() {
       this.$router.go(-1)
@@ -81,7 +82,7 @@ export default {
     &-price {
       color: #f44;
     }
-    &-express {
+    &-purchasePrice {
       color: #999;
       font-size: 12px;
       padding: 5px 15px;

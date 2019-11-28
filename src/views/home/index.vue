@@ -28,16 +28,19 @@
       van-divider 最新
       // 商品展示
       .home-goods-list(v-for='product in products')
-        van-card(:num='product.num' :price='product.price' :desc='product.desc' :title='product.title' :thumb='product.thumb[0]' @click='toDetails(product)')
-          div(slot='tags')
-            van-tag(plain type='danger') 标签
-            van-tag(plain type='danger') 标签
+        van-skeleton(name avatar avatar-size='90px' avatar-shape='square' :row='2' :loading='loading')
+          van-card(:num='product.count' :price='product.sellPrice' :origin-price='product.purchasePrice' :desc='product.des' :title='product.name' :thumb='product.img' @click='toDetails(product)')
+            div(slot='tags')
+            //
+              van-tag(plain type='danger') 标签
+              van-tag(plain type='danger') 标签
     .home-btmnar
       // 底部导航
       Tabbar(:tabNum='tabNum')
 </template>
 
 <script>
+import { getAllProducts } from '_api/product'
 import Tabbar from '_c/Tabbar/index'
 export default {
   name: 'Home',
@@ -47,47 +50,29 @@ export default {
   data() {
     return {
       show: true,
+      loading: false,
       tabNum: 0,
       searchKey: '',
-      products: [
-        {
-          num: '2',
-          price: '2.00',
-          desc: '描述',
-          title: '标题',
-          thumb: ['https://img.yzcdn.cn/public_files/2017/10/24/e5a5a02309a41f9f5def56684808d9ae.jpeg', 'https://img.yzcdn.cn/public_files/2017/10/24/e5a5a02309a41f9f5def56684808d9ae.jpeg'],
-          express: '免运费',
-          remain: '2'
-        },
-        {
-          num: '2',
-          price: '2.00',
-          desc: '描述',
-          title: '标题',
-          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg']
-        },
-        {
-          num: '2',
-          price: '2.00',
-          desc: '描述',
-          title: '标题',
-          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg']
-        },
-        {
-          num: '2',
-          price: '2.00',
-          desc: '描述',
-          title: '标题',
-          thumb: ['https://img.yzcdn.cn/vant/t-thirt.jpg']
-        }
-      ],
+      products: [],
       images: [
         'https://grithink.cn/upload/2019/10/wallhaven-g8171e-ebc82640c6f542d39060251e23f45941.png',
         'https://grithink.cn/upload/2019/10/wallhaven-017vm1-52fbb072750b4062b5efca1ce45980af.jpg'
       ]
     }
   },
+  created() {
+    this.getAllProducts()
+  },
   methods: {
+    getAllProducts() {
+      this.loading = true
+      getAllProducts().then(response => {
+        const { data } = response
+        this.products = data.data.products
+        console.log(this.products)
+        this.loading = false
+      })
+    },
     toSearch() {
       this.$router.push('/search')
     },
@@ -99,12 +84,12 @@ export default {
         {
           path: '/details',
           query: {
-            num: product.num,
-            price: product.price,
-            desc: product.desc,
-            title: product.title,
-            thumb: product.thumb,
-            express: product.express,
+            count: product.count,
+            sellPrice: product.sellPrice,
+            des: product.des,
+            name: product.name,
+            img: product.img,
+            purchasePrice: product.purchasePrice,
             remain: product.remain
           }
         }
