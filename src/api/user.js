@@ -17,10 +17,11 @@ export function loginByPhone(data) {
   })
 }
 
-export function getInfo() {
+export function getInfo(token) {
   return request({
-    url: '/token',
-    method: 'get'
+    url: '/user/find_u_one',
+    method: 'get',
+    params: { token }
   })
 }
 
@@ -50,7 +51,8 @@ export function verify(verification_code) {
 export function register(data) {
   return request({
     url: '/user/register',
+    headers: { 'content-type': 'application/json' },
     method: 'post',
-    data: qs.stringify(data)
+    data: JSON.stringify(data)
   })
 }

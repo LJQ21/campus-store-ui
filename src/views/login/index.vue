@@ -129,9 +129,9 @@ export default {
         }, 10)
       } else {
         // 调用登录验证api
-        console.log('登录成功！')
         this.$store.dispatch('user/loginByAccount', this.accountForm)
           .then(() => {
+            console.log('登录成功！')
             this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
           })
           .catch(error => {
