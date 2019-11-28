@@ -23,9 +23,10 @@
       .register-form_tab(v-if='active==1' class='animated fadeInRight')
         h2.register-form_tab_title 校园商城
         h3.register-form_tab_subtitle {{ stepUTip }}
-        input.input(type='text' placeholder='请输入用户名' v-model.trim='$v.stepU.username.$model' @blur='$v.stepU.username.$touch')
-        input.input(type='password' placeholder='请输入密码' v-model.trim='$v.stepU.password.$model' @blur='$v.stepU.password.$touch')
-        input.input(type='password' placeholder='请确认密码' v-model.trim='$v.stepU.repeatPassword.$model' @blur='$v.stepU.repeatPassword.$touch')
+        van-cell-group
+          van-field.input(type='text' placeholder='请输入用户名' v-model.trim='$v.stepU.account.$model' @blur='$v.stepU.account.$touch')
+          van-field.input(:type="checkShow ? 'text' : 'password'" placeholder='请输入密码' v-model.trim='$v.stepU.password.$model' @blur='$v.stepU.password.$touch' :right-icon="checkShow ? 'eye-o' :'closed-eye'" @click-right-icon='checkShow = !checkShow')
+          van-field.input(type='text' placeholder='请输入邮箱' v-model.trim='$v.stepU.email.$model' @blur='$v.stepU.email.$touch')
         van-button(type='primary' @click='toRegister') 注册
       .register-form_tab(v-if='active==2' class='animated fadeInRight')
         h2.register-form_tab_title 恭喜你，注册成功
@@ -33,9 +34,9 @@
 </template>
 
 <script>
-import { send, verify } from '@/api/user'
+import { send, verify, register } from '@/api/user'
 import { Toast } from 'vant'
-import { required, helpers, alphaNum, sameAs, minLength, maxLength } from 'vuelidate/lib/validators'
+import { required, helpers, alphaNum, minLength, maxLength, email } from 'vuelidate/lib/validators'
 const phone = helpers.regex('phone', /^1[3456789]\d{9}$/)
 export default {
   name: 'Register',
@@ -43,11 +44,12 @@ export default {
     return {
       active: 0,
       time: 2 * 60 * 1000,
+      checkShow: false,
       stepU: {
         // 用户密码
-        username: '',
+        account: '',
         password: '',
-        repeatPassword: ''
+        email: ''
       },
       stepP: {
         // 手机验证
@@ -59,7 +61,7 @@ export default {
   validations: {
     // 验证方式
     stepU: {
-      username: {
+      account: {
         required,
         alphaNum,
         minLength: minLength(4),
@@ -71,8 +73,8 @@ export default {
         minLength: minLength(6),
         maxLength: maxLength(18)
       },
-      repeatPassword: {
-        sameAsPassword: sameAs('password')
+      email: {
+        email
       }
     },
     stepP: {
@@ -104,44 +106,50 @@ export default {
       }
     },
     clickNext() {
-        // 手机验证
+      // 手机验证
       this.$v.stepP.$touch()
       if (this.$v.stepP.$invalid) {
         Toast.fail('请输入正确的手机号和验证码！')
       } else {
         // 调用手机验证Api
         verify(this.stepP.valiNum).then(res => {
+          // 验证通过，下一步
           Toast.success('验证通过！')
           this.active = this.active + 1
         }).catch(error => {
+          console.log(error)
           Toast('手机验证码错误')
         })
       }
     },
     toRegister() {
       // 注册
-      if (this.active === 0) {
+      if (this.active === 1) {
         this.$v.stepU.$touch()
         if (this.$v.stepU.$invalid) {
           Toast.fail('请先完善基本信息')
         } else {
-          this.active = this.active + 1
+          // 调用注册api
+          register({ account: this.stepU.account, password: this.stepU.password, email: this.stepU.email }).then(() => {
+            this.active = this.active + 1
+          }).catch(error => {
+            console.log(error)
+            Toast('注册失败')
+          })
         }
-      } else {
-        this.active = this.active + 1
       }
     }
   },
   computed: {
     stepUTip() {
       // 注册用户密码验证提示信息
-      if (this.$v.stepU.username.$dirty && !this.$v.stepU.username.required) {
+      if (this.$v.stepU.account.$dirty && !this.$v.stepU.account.required) {
         return '用户名不能为空'
-      } else if (this.$v.stepU.username.$dirty && !this.$v.stepU.username.minLength) {
+      } else if (this.$v.stepU.account.$dirty && !this.$v.stepU.account.minLength) {
         return '用户名不得少于4位'
-      } else if (this.$v.stepU.username.$dirty && !this.$v.stepU.username.alphaNum) {
+      } else if (this.$v.stepU.account.$dirty && !this.$v.stepU.account.alphaNum) {
         return '用户名只能位数字或字母构成'
-      } else if (this.$v.stepU.username.$dirty && !this.$v.stepU.username.maxLength) {
+      } else if (this.$v.stepU.account.$dirty && !this.$v.stepU.account.maxLength) {
         return '用户名不得超过18位'
       } else if (this.$v.stepU.password.$dirty && !this.$v.stepU.password.required) {
         return '密码不能为空'
@@ -151,10 +159,10 @@ export default {
         return '密码不能少于6位'
       } else if (this.$v.stepU.password.$dirty && !this.$v.stepU.password.maxLength) {
         return '密码不能超过18位'
-      } else if (this.$v.stepU.repeatPassword.$dirty && !this.$v.stepU.repeatPassword.sameAsPassword) {
-        return '两次密码不一致'
+      } else if (this.$v.stepU.email.$dirty && !this.$v.stepU.email.email) {
+        return '邮箱格式不符合'
       } else {
-        return '第一步'
+        return '我们大学生自己的二手交易商城'
       }
     },
     setpPTip() {

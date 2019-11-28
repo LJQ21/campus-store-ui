@@ -46,3 +46,11 @@ export function verify(verification_code) {
     params: { verification_code }
   })
 }
+
+export function register(data) {
+  return request({
+    url: '/user/register',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}

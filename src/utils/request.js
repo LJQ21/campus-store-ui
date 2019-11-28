@@ -84,13 +84,13 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   // 请求成功
-  res => res.status === 200 ? Promise.resolve(res) : Promise.reject(res),
+  res => res.status === 200 && res.data.code === 200 ? Promise.resolve(res) : Promise.reject(res),
   // 请求失败
   error => {
     const { response } = error
     if (response) {
       // 请求已发出，但是不在2xx的范围
-      errorHandle(response.status, response.data.message)
+      errorHandle(response.status, response.data.msg)
       return Promise.reject(response)
     } else {
       // 处理断网的情况
