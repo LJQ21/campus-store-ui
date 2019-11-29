@@ -85,7 +85,7 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   // 请求成功
-  res => res.status === 200 && res.data.code === 200 ? Promise.resolve(res) : Promise.reject(res),
+  res => res.status === 200 && res.data.code === 2000 ? Promise.resolve(res) : Promise.reject(res),
   // 请求失败
   error => {
     const { response } = error

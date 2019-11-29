@@ -56,3 +56,19 @@ export function register(data) {
     data: JSON.stringify(data)
   })
 }
+
+export function verifyAccount(account) {
+  return request({
+    url: 'user/is_exist_a',
+    method: 'get',
+    params: { account }
+  })
+}
+
+export function verifyEmail(email) {
+  return request({
+    url: '/user/is_exist_e',
+    method: 'get',
+    params: { email }
+  })
+}
