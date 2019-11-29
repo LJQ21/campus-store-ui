@@ -15,9 +15,13 @@ const routes = [
     component: () => import('@/views/register/index')
   },
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
     component: () => import('@/views/home/index')
+  },
+  {
+    path: '/home',
+    redirect: { name: 'Home' }
   },
   {
     path: '/form',
