@@ -38,10 +38,10 @@ export default {
         }
       ],
       addressForm: {
-        name: '',
-        phoneNumber: '',
+        name: this.$route.query.name,
+        phoneNumber: this.$route.query.tel,
         city: '',
-        addressDetail: ''
+        addressDetail: this.$route.query.address
       }
     }
   },
