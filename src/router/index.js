@@ -69,6 +69,18 @@ const routes = [
         component: () => import('@/views/address/list-address/index')
       }
     ]
+  },
+  {
+    path: '/school',
+    name: 'School',
+    component: () => import('@/views/school/index'),
+    children: [
+      {
+        path: '/school/select',
+        name: 'SelectSchool',
+        component: () => import('@/views/school/select-school/index')
+      }
+    ]
   }
 ]
 

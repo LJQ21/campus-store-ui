@@ -5,29 +5,78 @@ import store from '@/store'
 import '_lib/Animate/animate.min.css'
 import '@/permission.js'
 import Vuelidate from 'vuelidate' // 引入表单验证
-import { Notify, Tabbar, TabbarItem, NavBar, Button, Row, Col, Cell, CellGroup, Icon, Checkbox, CheckboxGroup, Card, SubmitBar, CountDown, Step, Steps, Search, Swipe, SwipeItem, Lazyload, Sku, Tag, Grid, GridItem, Image, Divider, Sticky, Field, Picker, Popup, Uploader, Sidebar, SidebarItem, GoodsAction, GoodsActionIcon, GoodsActionButton, Skeleton, Loading, Switch, AddressList } from 'vant'
+import {
+  Notify,
+  Tabbar,
+  TabbarItem,
+  NavBar,
+  Button,
+  Row,
+  Col,
+  Cell,
+  CellGroup,
+  Icon,
+  Checkbox,
+  CheckboxGroup,
+  Card,
+  SubmitBar,
+  CountDown,
+  Step,
+  Steps,
+  Search,
+  Swipe,
+  SwipeItem,
+  Lazyload,
+  Sku,
+  Tag,
+  Grid,
+  GridItem,
+  Image,
+  Divider,
+  Sticky,
+  Field,
+  Picker,
+  Popup,
+  Uploader,
+  Sidebar,
+  SidebarItem,
+  GoodsAction,
+  GoodsActionIcon,
+  GoodsActionButton,
+  Skeleton,
+  Loading,
+  Switch,
+  AddressList,
+  List
+} from 'vant'
 
-Vue
-  .use(Vuelidate)
+Vue.use(Vuelidate)
   .use(Notify)
-  .use(Tabbar).use(TabbarItem)
+  .use(Tabbar)
+  .use(TabbarItem)
   .use(NavBar)
   .use(Button)
-  .use(Row).use(Col)
-  .use(Cell).use(CellGroup)
+  .use(Row)
+  .use(Col)
+  .use(Cell)
+  .use(CellGroup)
   .use(Icon)
-  .use(Checkbox).use(CheckboxGroup)
+  .use(Checkbox)
+  .use(CheckboxGroup)
   .use(Card)
   .use(SubmitBar)
   .use(CountDown)
-  .use(Step).use(Steps)
+  .use(Step)
+  .use(Steps)
   .use(Search)
-  .use(Swipe).use(SwipeItem)
-// options 为可选参数，无则不传
+  .use(Swipe)
+  .use(SwipeItem)
+  // options 为可选参数，无则不传
   .use(Lazyload)
   .use(Sku)
   .use(Tag)
-  .use(Grid).use(GridItem)
+  .use(Grid)
+  .use(GridItem)
   .use(Image)
   .use(Divider) // 分割线
   .use(Sticky)
@@ -44,6 +93,7 @@ Vue
   .use(Loading) // 加载
   .use(Switch)
   .use(AddressList)
+  .use(List)
 
 Vue.config.productionTip = false
 

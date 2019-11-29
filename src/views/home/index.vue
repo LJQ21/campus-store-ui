@@ -2,7 +2,7 @@
   #home-container
     .home-header
       van-nav-bar(title='校园二手商城')
-        .home-header-left(slot='left' @click='selectSchool')
+        .home-header-left(slot='left' @click="$router.push('/school/select')")
           van-icon(name='location-o')
           span [贵民大]
       van-sticky
