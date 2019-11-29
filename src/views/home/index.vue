@@ -2,6 +2,9 @@
   #home-container
     .home-header
       van-nav-bar(title='校园二手商城')
+        .home-header-left(slot='left' @click='selectSchool')
+          van-icon(name='location-o')
+          span [贵民大]
       van-sticky
         van-search(placeholder='请输入搜索关键词' v-model='searchKey' @click='toSearch')
     .home-content

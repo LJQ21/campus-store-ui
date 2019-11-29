@@ -41,7 +41,7 @@ const routes = [
   {
     path: '/search',
     name: 'Search',
-    component: () => import('@/views/search/index')
+    component: () => import('@/views/home/search')
   },
   {
     path: '/classify',
@@ -51,7 +51,7 @@ const routes = [
   {
     path: '/details',
     name: 'Details',
-    component: () => import('@/views/details/index')
+    component: () => import('@/views/home/details')
   },
   {
     path: '/address',
