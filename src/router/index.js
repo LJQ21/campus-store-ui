@@ -52,6 +52,23 @@ const routes = [
     path: '/details',
     name: 'Details',
     component: () => import('@/views/details/index')
+  },
+  {
+    path: '/address',
+    name: 'Address',
+    component: () => import('@/views/address/index'),
+    children: [
+      {
+        path: '/address/edit',
+        name: 'Edit',
+        component: () => import('@/views/address/edit-address/index')
+      },
+      {
+        path: '/address/list',
+        name: 'List',
+        component: () => import('@/views/address/list-address/index')
+      }
+    ]
   }
 ]
 

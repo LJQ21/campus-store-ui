@@ -7,7 +7,7 @@ import { getToken } from '@/utils/auth' // get token from cookie
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login', '/register'] // no redirect whitelist
+const whiteList = ['/login', '/register', '/address/edit'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -29,6 +29,7 @@ router.beforeEach(async(to, from, next) => {
       } else {
         try {
           const { roles } = await store.dispatch('user/getInfo')
+          console.log(roles)
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })

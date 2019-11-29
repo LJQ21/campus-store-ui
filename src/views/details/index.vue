@@ -21,7 +21,7 @@
     .details-btmnar
       // 商品底部栏
       van-goods-action
-        van-goods-action-icon(icon='chat-o', @click='sorry')
+        van-goods-action-icon(icon='chat-o')
           | 客服
         van-goods-action-icon(icon='cart-o', @click='goCart')
           | 购物车
